@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 deleteDir()
-                git(url: 'https://github.com/mia-amanda/Flask_Application_Kurbenetes.git', branch: 'main', credentialsId: 'github-credentials') // Add your credentials ID here
+                git(url: 'https://github.com/mia-amanda/Flask_Application_Kurbenetes.git', branch: 'main')
             }
         }
         
