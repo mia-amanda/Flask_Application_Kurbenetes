@@ -7,6 +7,13 @@ pipeline {
     }
 
     stages {
+        stage('Checkout') {
+          steps {
+            deleteDir()
+            git(url: 'https://github.com/mia-amanda/Flask_Application_Kurbenetes.git', branch: 'main')
+          }
+        }
+        
         stage('Build and Push Docker Image') {
             steps {
                 script {
