@@ -13,6 +13,12 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/mia-amanda/Flask_Application_Kurbenetes.git'
             }
         }
+
+        stage('Install Dependencies') {
+            steps {
+                bat 'pip install -r requirements.txt'
+            }
+        }
         
         stage('Build and Push Docker Image') {
             steps {
