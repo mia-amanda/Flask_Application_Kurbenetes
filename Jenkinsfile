@@ -33,7 +33,7 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', passwordVariable: 'dockerKey', usernameVariable: 'dockerUser')]) {
                         // Build Docker image
-                        sh """
+                        bat """
                         echo "Building Docker image..."
                         docker build -t ${dockerUser}/flask-app:latest .
                         echo "Logging in to Docker..."
