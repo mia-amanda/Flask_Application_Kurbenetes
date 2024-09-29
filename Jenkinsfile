@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = "${params.DOCKER_USERNAME}/flask-app:latest"
-        JIRA_SITE = 'Jira-Instance' // Replace with your Jira instance URL
-        JIRA_PROJECT_KEY = 'YourProjectKey' // Replace with your Jira project key
+        JIRA_SITE = 'sit-team-vr03pn0q' // Replace with your Jira instance URL
+        JIRA_PROJECT_KEY = 'PMP' // Replace with your Jira project key
         DOCKER_USERNAME = credentials('docker-hub-credentials')?.USERNAME
         DOCKER_PASSWORD = credentials('docker-hub-credentials')?.PASSWORD
     }
