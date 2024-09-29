@@ -8,10 +8,10 @@ pipeline {
 
     stages {
         stage('Checkout') {
-          steps {
-            deleteDir()
-            git(url: 'https://github.com/mia-amanda/Flask_Application_Kurbenetes.git', branch: 'main')
-          }
+            steps {
+                deleteDir()
+                git(url: 'https://github.com/mia-amanda/Flask_Application_Kurbenetes.git', branch: 'main', credentialsId: 'github-credentials') // Add your credentials ID here
+            }
         }
         
         stage('Build and Push Docker Image') {
