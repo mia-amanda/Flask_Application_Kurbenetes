@@ -31,23 +31,21 @@ pipeline {
         stage('Build and Push Docker Image') {
             steps {
                 script {
-                    // Build and push Docker image
-                    def dockerCredentials = credentials('docker-hub-credentials')
-                    def dockerUsername = dockerCredentials.username
-                    def dockerPassword = dockerCredentials.password
-
-                    bat """
-                    echo "Building Docker image..."
-                    docker build -t ${dockerUsername}/flask-app:latest .
-                    echo "Logging in to Docker..."
-                    echo ${dockerPassword} | docker login -u ${dockerUsername} --password-stdin
-                    echo "Pushing Docker image..."
-                    docker push ${dockerUsername}/flask-app:latest
-                    """
-
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', passwordVariable: 'dockerKey', usernameVariable: 'dockerUser')]) {
+                        // Build Docker image
+                        sh """
+                        echo "Building Docker image..."
+                        docker build -t ${dockerUser}/flask-app:latest .
+                        echo "Logging in to Docker..."
+                        echo \${dockerKey} | docker login --username \${dockerUser} --password-stdin
+                        echo "Pushing Docker image..."
+                        docker push ${dockerUser}/flask-app:latest
+                        """
+                    }
                 }
             }
         }
+
 
         stage('Deploy to Kubernetes') {
             steps {
