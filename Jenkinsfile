@@ -2,10 +2,6 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_CREDENTIALS = credentials('docker-hub-credentials')
-        DOCKER_USERNAME = DOCKER_CREDENTIALS.username // Get the username from the credentials
-        DOCKER_PASSWORD = DOCKER_CREDENTIALS.password // Get the password from the credentials
-        DOCKER_IMAGE = "${DOCKER_USERNAME}/flask-app:latest"
         JIRA_SITE = 'sit-team-vr03pn0q' // Your Jira site name
         JIRA_PROJECT_KEY = 'PMP' // Your Jira project key
     }
@@ -15,10 +11,14 @@ pipeline {
             steps {
                 script {
                     // Build and push Docker image
+                    def dockerCredentials = credentials('docker-hub-credentials')
+                    def dockerUsername = dockerCredentials.username
+                    def dockerPassword = dockerCredentials.password
+
                     bat """
-                    docker build -t %DOCKER_IMAGE% .
-                    docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
-                    docker push %DOCKER_IMAGE%
+                    docker build -t ${dockerUsername}/flask-app:latest .
+                    docker login -u ${dockerUsername} -p ${dockerPassword}
+                    docker push ${dockerUsername}/flask-app:latest
                     """
                 }
             }
