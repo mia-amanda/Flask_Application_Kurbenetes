@@ -29,10 +29,14 @@ pipeline {
                     def dockerPassword = dockerCredentials.password
 
                     bat """
+                    echo "Building Docker image..."
                     docker build -t ${dockerUsername}/flask-app:latest .
-                    docker login -u ${dockerUsername} -p ${dockerPassword}
+                    echo "Logging in to Docker..."
+                    echo ${dockerPassword} | docker login -u ${dockerUsername} --password-stdin
+                    echo "Pushing Docker image..."
                     docker push ${dockerUsername}/flask-app:latest
                     """
+
                 }
             }
         }
