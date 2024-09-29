@@ -19,6 +19,14 @@ pipeline {
                 bat 'pip install -r requirements.txt'
             }
         }
+
+        stage('Check Docker Daemon') {
+            steps {
+                script {
+                    bat 'docker info || echo "Docker daemon is not running"'
+                }
+            }
+        }
         
         stage('Build and Push Docker Image') {
             steps {
