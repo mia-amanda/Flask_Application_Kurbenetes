@@ -9,10 +9,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                timeout(time: 5, unit: 'MINUTES') { // Extend the timeout to 5 minutes
-                    deleteDir()
-                    git branch: 'main', url: 'https://github.com/mia-amanda/Flask_Application_Kurbenetes.git'
-                }
+                deleteDir()
+                git branch: 'main', url: 'https://github.com/mia-amanda/Flask_Application_Kurbenetes.git'
             }
         }
         
