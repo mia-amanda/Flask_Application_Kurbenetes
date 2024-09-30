@@ -67,7 +67,7 @@ pipeline {
 
                         // Create a Jira ticket if any pod is unhealthy
                         jiraNewIssue site: env.JIRA_SITE,
-                                     projectKey: env.JIRA_PROJECT_KEY,
+                                     project: env.JIRA_PROJECT_KEY,
                                      summary: "Pod Failure Detected in Kubernetes Cluster",
                                      description: """
                                      There was an issue detected with the following pod(s):
@@ -82,7 +82,7 @@ pipeline {
 
                         // Create a Jira issue indicating all pods are running fine
                         jiraNewIssue site: env.JIRA_SITE,
-                                     projectKey: env.JIRA_PROJECT_KEY,
+                                     project: env.JIRA_PROJECT_KEY,
                                      summary: "All Pods Running Fine",
                                      description: "All pods are up and running without issues.",
                                      issueType: 'Task'
