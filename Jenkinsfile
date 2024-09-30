@@ -77,18 +77,21 @@ pipeline {
                                      issueType: 'Bug'
                     } else {
                         echo "All Pods are running fine."
+
+                        // Create a Jira ticket to report that pods are running fine
+                        jiraNewIssue site: env.JIRA_SITE,
+                                     projectKey: env.JIRA_PROJECT_KEY,
+                                     summary: "All Pods are Running Smoothly",
+                                     description: """
+                                     All pods are currently running without issues:
+                                     ${podStatus}
+                                     """,
+                                     issueType: 'Task' // You can choose an appropriate issue type
                     }
                 }
             }
         }
 
-        stage('Check Minikube Service') {
-            steps {
-                bat """
-                minikube service flask-service --url
-                """
-            }
-        }
     }
 
     post {
