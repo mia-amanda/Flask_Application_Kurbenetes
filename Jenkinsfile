@@ -60,39 +60,53 @@ pipeline {
             steps {
                 script {
                     def podStatus = bat(returnStdout: true, script: 'kubectl get pods').trim()
-
+        
                     // Check for any pods in Error/CrashLoopBackOff status
                     if (podStatus.contains('Error') || podStatus.contains('CrashLoopBackOff')) {
                         currentBuild.result = 'UNSTABLE'
-
+        
                         // Create a Jira ticket if any pod is unhealthy
-                        jiraNewIssue site: env.JIRA_SITE,
-                                     project: env.JIRA_PROJECT_KEY,
-                                     summary: "Pod Failure Detected in Kubernetes Cluster",
-                                     description: """
-                                     There was an issue detected with the following pod(s):
-                                     ${podStatus}
-                                     Please investigate the issue immediately.
-                                     """,
-                                     issueType: 'Bug'
+                        def issueFailure = [
+                            fields: [
+                                project: [key: env.JIRA_PROJECT_KEY],  // Use project key
+                                summary: "Pod Failure Detected in Kubernetes Cluster",
+                                description: """
+                                There was an issue detected with the following pod(s):
+                                ${podStatus}
+                                Please investigate the issue immediately.
+                                """,
+                                issuetype: [name: 'Bug']  // Use the issue type name
+                            ]
+                ]
 
+                responseFailure = jiraNewIssue(issue: issueFailure)
 
-                    } else {
-                        echo "All Pods are running fine."
+                // Log the response for the issue creation
+                echo "Jira issue creation for pod failure successful: ${responseFailure.successful}"
+                echo "Response data: ${responseFailure.data}"
 
-                        // Create a Jira issue indicating all pods are running fine
-                        jiraNewIssue site: env.JIRA_SITE,
-                                     project: env.JIRA_PROJECT_KEY,
-                                     summary: "All Pods Running Fine",
-                                     description: "All pods are up and running without issues.",
-                                     issueType: 'Task'
+            } else {
+                echo "All Pods are running fine."
 
-                    }
-                }
+                // Create a Jira issue indicating all pods are running fine
+                def issueSuccess = [
+                    fields: [
+                        project: [key: env.JIRA_PROJECT_KEY],  // Use project key
+                        summary: "All Pods Running Fine",
+                        description: "All pods are up and running without issues.",
+                        issuetype: [name: 'Task']  // Use the issue type name
+                    ]
+                ]
+
+                responseSuccess = jiraNewIssue(issue: issueSuccess)
+
+                // Log the response for the issue creation
+                echo "Jira issue creation for pod status successful: ${responseSuccess.successful}"
+                echo "Response data: ${responseSuccess.data}"
             }
         }
-
     }
+
 
     post {
         always {
