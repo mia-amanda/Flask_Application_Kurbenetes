@@ -67,28 +67,26 @@ pipeline {
 
                         // Create a Jira ticket if any pod is unhealthy
                         jiraNewIssue site: env.JIRA_SITE,
-                                     fields: [
-                                         project: [key: env.JIRA_PROJECT_KEY],
-                                         summary: "Pod Failure Detected in Kubernetes Cluster",
-                                         description: """
-                                         There was an issue detected with the following pod(s):
-                                         ${podStatus}
-                                         Please investigate the issue immediately.
-                                         """,
-                                         issuetype: [name: 'Bug']
-                                     ]
+                                     projectKey: env.JIRA_PROJECT_KEY,
+                                     summary: "Pod Failure Detected in Kubernetes Cluster",
+                                     description: """
+                                     There was an issue detected with the following pod(s):
+                                     ${podStatus}
+                                     Please investigate the issue immediately.
+                                     """,
+                                     issueType: 'Bug'
+
 
                     } else {
                         echo "All Pods are running fine."
 
                         // Create a Jira issue indicating all pods are running fine
-                        jiraNewIssue site: env.JIRA_SITE, 
-                                     fields: [
-                                         project: [key: env.JIRA_PROJECT_KEY],
-                                         summary: "All Pods Running Fine",
-                                         description: "All pods are up and running without issues.",
-                                         issuetype: [name: 'Task']
-                                     ]
+                        jiraNewIssue site: env.JIRA_SITE,
+                                     projectKey: env.JIRA_PROJECT_KEY,
+                                     summary: "All Pods Running Fine",
+                                     description: "All pods are up and running without issues.",
+                                     issueType: 'Task'
+
                     }
                 }
             }
